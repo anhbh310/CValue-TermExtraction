@@ -40,7 +40,8 @@ public class NounFilter implements ILinguisticFilter {
         list = new ArrayList<>();
         if (pSentence != null) {
             for (Token token : pSentence) {
-                if (token.getPosTag().matches("NN|NNS|NNP|NNPS")) {
+//                if (token.getPosTag().matches("NN|NNS|NNP|NNPS")) {
+                if (token.getPosTag().matches("Nc|N")) {
                     String candidate = null;
                     int pos = pSentence.indexOf(token);
                     String result = findCandidate(pSentence, pos, candidate);
@@ -60,14 +61,16 @@ public class NounFilter implements ILinguisticFilter {
             word = pSentence.get(pPos + 1);
         }
         if (word != null) {
-            if (word.getPosTag().matches("NN|NNS|NNP|NNPS")) {
+//            if (word.getPosTag().matches("NN|NNS|NNP|NNPS")) {
+            if (word.getPosTag().matches("Nc|N")) {
                 candidate = pSentence.get(pPos).getWordForm() + " " + word.getWordForm();
                 list.add(candidate);
                 pPos++;
                 if (sentenceSize - 1 == pPos) {
                     candidate = null;
                 } else {
-                    if (!(pSentence.get(pPos).getPosTag().matches("NN|NNS|NNP|NNPS"))) {
+//                    if (!(pSentence.get(pPos).getPosTag().matches("NN|NNS|NNP|NNPS"))) {
+                    if (!(pSentence.get(pPos).getPosTag().matches("Nc|N"))) {
                         return null;
                     }
                 }
@@ -90,7 +93,8 @@ public class NounFilter implements ILinguisticFilter {
             word = pSentence.get(pPos + 1);
         }
         if (word != null) {
-            if (word.getPosTag().matches("NN|NNS|NNP|NNPS")) {
+//            if (word.getPosTag().matches("NN|NNS|NNP|NNPS")) {
+            if (word.getPosTag().matches("Nc|N")) {
                 candidate = candidate + " " + word.getWordForm();
                 list.add(candidate);
                 pPos++;
@@ -98,7 +102,8 @@ public class NounFilter implements ILinguisticFilter {
                 if (sentenceSize - 1 == pPos) {
                     candidate = null;
                 } else {
-                    if (!(pSentence.get(pPos).getPosTag().matches("NN|NNS|NNP|NNPS"))) {
+//                    if (!(pSentence.get(pPos).getPosTag().matches("NN|NNS|NNP|NNPS"))) {
+                    if (!(pSentence.get(pPos).getPosTag().matches("Nc|N"))) {
                         return null;
                     }
                 }
