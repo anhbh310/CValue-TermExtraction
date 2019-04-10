@@ -22,14 +22,13 @@ package edu.ehu.galan.cvalue.filters.english;
 
 import edu.ehu.galan.cvalue.filters.ILinguisticFilter;
 import edu.ehu.galan.cvalue.model.Token;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Filter that searchs for Noun+Noun using Penn Treebank Tags
- *
+ * Filter that searchs for Noun+Noun using Penn Treebank Tags 
+*
  * @author Angel Conde Manjon
  */
 public class NounFilter implements ILinguisticFilter {
@@ -42,26 +41,82 @@ public class NounFilter implements ILinguisticFilter {
         if (pSentence != null) {
             for (Token token : pSentence) {
                 if (token.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny")) {
+                    String candidate = null;
                     int pos = pSentence.indexOf(token);
-                    String candidate = token.getWordForm();
-                    findCandidate(pSentence, pos, candidate);
+                    String result = findCandidate(pSentence, pos, candidate);
+                    if (result != null) {
+                        list.add(result);
+                    }
                 }
             }
         }
         return list;
     }
 
-    private void findCandidate(LinkedList<Token> pSentence, int pPos, String candidate) {
+    private String findCandidate(LinkedList<Token> pSentence, int pPos, String candidate) {
         int sentenceSize = pSentence.size();
-        Token word = pSentence.get(pPos + 1);
-        if (word.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny")) {
-            candidate = pSentence.get(pPos).getWordForm() + " " + word.getWordForm();
-            list.add(candidate);
-            pPos++;
-            if (sentenceSize - 1 == pPos || !(pSentence.get(pPos).getPosTag().matches("Np|Nc|N|Nu|Nb|Ny"))) {
-                return;
-            }
-            findCandidate(pSentence, pPos, candidate);
+        Token word = null;
+        if (sentenceSize - 1 > pPos) {
+            word = pSentence.get(pPos + 1);
         }
+        if (word != null) {
+            if (word.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny")) {
+                candidate = pSentence.get(pPos).getWordForm() + " " + word.getWordForm();
+                list.add(candidate);
+                pPos++;
+                if (sentenceSize - 1 == pPos) {
+                    candidate = null;
+                } else {
+                    if (!(pSentence.get(pPos).getPosTag().matches("Np|Nc|N|Nu|Nb|Ny"))) {
+                        return null;
+                    }
+                }
+                return findCandidate2(pSentence, pPos, candidate);
+            } else {
+                return candidate;
+            }
+        } else {
+            return candidate;
+        }
+
+
     }
+
+    private String findCandidate2(LinkedList<Token> pSentence, int pPos, String candidate) {
+
+        int sentenceSize = pSentence.size();
+        Token word = null;
+        if (sentenceSize - 1 > pPos) {
+            word = pSentence.get(pPos + 1);
+        }
+        if (word != null) {
+            if (word.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny")) {
+                candidate = candidate + " " + word.getWordForm();
+                list.add(candidate);
+                pPos++;
+
+                if (sentenceSize - 1 == pPos) {
+                    candidate = null;
+                } else {
+                    if (!(pSentence.get(pPos).getPosTag().matches("Np|Nc|N|Nu|Nb|Ny"))) {
+                        return null;
+                    }
+                }
+                return findCandidate2(pSentence, pPos, candidate);
+            } else {
+                return candidate;
+            }
+        } else {
+            return candidate;
+        }
+
+    }
+
+//    public static void main(String[] args) {
+//        LinkedList<Token> tokenList = new LinkedList<>();
+//        tokenList.add(new Token("hello", "NN"));
+//        tokenList.add(new Token("hello", "NN"));
+//        new NounFilter().getCandidates(tokenList);
+//
+//    }
 }
