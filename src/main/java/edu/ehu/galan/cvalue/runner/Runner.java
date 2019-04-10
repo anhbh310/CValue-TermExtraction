@@ -1,7 +1,8 @@
-package edu.ehu.galan.cvalue.model;
+package edu.ehu.galan.cvalue.runner;
 
+import edu.ehu.galan.cvalue.model.*;
 import edu.ehu.galan.cvalue.CValueAlgortithm;
-import edu.ehu.galan.cvalue.filters.english.NounFilter;
+import edu.ehu.galan.cvalue.filters.vietnamese.*;
 import vn.pipeline.*;
 
 import java.io.*;
@@ -14,7 +15,7 @@ public class Runner {
         String[] annotators = {"pos", "wseg"};
         VnCoreNLP pipeline = new VnCoreNLP(annotators);
         List<LinkedList<Token>> tokenList = new ArrayList<>();
-        LinkedList<Token> tokens = new LinkedList<Token>();
+        LinkedList<Token> tokens = new LinkedList<>();
 
         tokenList.add(tokens);
 
