@@ -38,10 +38,13 @@ import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.util.resources.cldr.ar.CalendarData_ar_YE;
 
 /**
  * A document represents the piece of a corpus containing text.
@@ -96,6 +99,14 @@ public class Document {
         this.sentenceList = sentenceList;
     }
 
+    public void setSentenceList() throws FileNotFoundException {
+        Scanner scan = new Scanner(new File(this.path));
+        List<String> tmpSentenceList= new ArrayList<>();
+        while (scan.hasNext()){
+            tmpSentenceList.add(scan.nextLine());
+        }
+        this.sentenceList = tmpSentenceList;
+    }
     /**
      * @return the tokenList
      */

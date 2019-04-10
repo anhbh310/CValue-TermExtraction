@@ -11,34 +11,34 @@ import java.util.List;
 
 public class Runner {
     public static void main(String[] args) throws IOException {
-        String[] annotators = {"pos"};
+        String[] annotators = {"pos", "wseg"};
         VnCoreNLP pipeline = new VnCoreNLP(annotators);
-        String str = "Con mèo ngu đang ăn cơm, con chó thì đứng nhìn";
-        Annotation annotation = new Annotation(str);
-        pipeline.annotate(annotation);
-
         List<LinkedList<Token>> tokenList = new ArrayList<>();
         LinkedList<Token> tokens = new LinkedList<Token>();
-        for (Sentence sentence : annotation.getSentences()) {
-            for (Word word : sentence.getWords()) {
-//                System.out.println(word.getForm()+'\t'+word.getPosTag());
-                tokens.add(new Token(word.getForm(), word.getPosTag()));
-            }
-        }
+
         tokenList.add(tokens);
 
-        List<String> sentenceList = new ArrayList<>();
-        sentenceList.add(str);
+        Document doc = new Document("doc.txt", "doc.txt");
+        doc.setSentenceList();
+        List<String> sentenceList = doc.getSentenceList();
 
-        Document doc = new Document("doc.txt","doc.txt");
-        doc.setSentenceList(sentenceList);
+        for (String str : sentenceList) {
+            Annotation annotation = new Annotation(str);
+            pipeline.annotate(annotation);
+            for (Sentence sentence: annotation.getSentences()){
+                for (Word word: sentence.getWords()){
+                    tokens.add(new Token(word.getForm(), word.getPosTag()));
+                }
+            }
+        }
+
         doc.List(tokenList);
         CValueAlgortithm cvalue = new CValueAlgortithm();
         cvalue.init(doc);
         cvalue.addNewProcessingFilter(new NounFilter());
         cvalue.runAlgorithm();
-        for (Term term: doc.getTermList()){
-            System.out.println(term.getTerm()+'\t'+term.getScore());
+        for (Term term : doc.getTermList()) {
+            System.out.println(term.getTerm() + '\t' + term.getScore());
         }
     }
 }
