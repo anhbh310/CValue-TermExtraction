@@ -38,8 +38,10 @@ public class Runner {
         cvalue.init(doc);
         cvalue.addNewProcessingFilter(new NounFilter());
         cvalue.runAlgorithm();
+        PrintWriter writer = new PrintWriter("output.txt");
         for (Term term : doc.getTermList()) {
-            System.out.println(term.getTerm() + '\t' + term.getScore());
+            writer.println(term.getTerm() + '\t' + term.getScore());
         }
+        writer.close();
     }
 }
