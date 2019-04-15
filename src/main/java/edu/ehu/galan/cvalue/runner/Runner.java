@@ -17,8 +17,6 @@ public class Runner {
         List<LinkedList<Token>> tokenList = new ArrayList<>();
         LinkedList<Token> tokens = new LinkedList<>();
 
-        tokenList.add(tokens);
-
         Document doc = new Document("doc.txt", "doc.txt");
         doc.setSentenceList();
         List<String> sentenceList = doc.getSentenceList();
@@ -26,17 +24,18 @@ public class Runner {
         for (String str : sentenceList) {
             Annotation annotation = new Annotation(str);
             pipeline.annotate(annotation);
-            for (Sentence sentence: annotation.getSentences()){
-                for (Word word: sentence.getWords()){
+            for (Sentence sentence : annotation.getSentences()) {
+                for (Word word : sentence.getWords()) {
                     tokens.add(new Token(word.getForm(), word.getPosTag()));
                 }
             }
         }
 
+        tokenList.add(tokens);
         doc.List(tokenList);
         CValueAlgortithm cvalue = new CValueAlgortithm();
         cvalue.init(doc);
-        cvalue.addNewProcessingFilter(new NounFilter());
+        cvalue.addNewProcessingFilter(new NounVerbFilter("stopWord.txt"));
         cvalue.runAlgorithm();
         PrintWriter writer = new PrintWriter("output.txt");
         for (Term term : doc.getTermList()) {
