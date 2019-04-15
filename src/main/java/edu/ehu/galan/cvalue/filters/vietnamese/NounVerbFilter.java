@@ -14,21 +14,23 @@ public class NounVerbFilter implements ILinguisticFilter {
     private List<String> list;
     private List<String> stopWords;
 
-    public NounVerbFilter(){}
+    public NounVerbFilter() {
+    }
 
     public NounVerbFilter(String fileName) throws FileNotFoundException {
         stopWords = new ArrayList<>();
         Scanner scan = new Scanner(new File(fileName));
-        while (scan.hasNext()){
+        while (scan.hasNext()) {
             stopWords.add(scan.nextLine());
         }
     }
+
     @Override
     public List<String> getCandidates(LinkedList<Token> pSentence) {
         list = new ArrayList<>();
         if (pSentence != null) {
             for (Token token : pSentence) {
-                if (token.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny")) {
+                if (token.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny") && isStopWord(token.getWordForm())) {
                     int pos = pSentence.indexOf(token);
                     String candidate = token.getWordForm();
                     findCandidate(pSentence, pos, candidate);
@@ -53,10 +55,10 @@ public class NounVerbFilter implements ILinguisticFilter {
         }
     }
 
-    private boolean isStopWord(String t){
+    private boolean isStopWord(String t) {
         if (this.stopWords == null) return true;
-        for (String s : this.stopWords){
-            if (s.compareTo(t)==0) return false;
+        for (String s : this.stopWords) {
+            if (s.toLowerCase().compareTo(t.toLowerCase()) == 0) return false;
         }
         return true;
     }

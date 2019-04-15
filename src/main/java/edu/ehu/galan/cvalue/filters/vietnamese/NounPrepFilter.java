@@ -30,7 +30,7 @@ public class NounPrepFilter implements ILinguisticFilter {
         list = new ArrayList<>();
         if (pSentence != null) {
             for (Token token : pSentence) {
-                if (token.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny")) {
+                if (token.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny") && isStopWord(token.getWordForm())) {
                     tokenList = new ArrayList<>();
                     tokenList.add(token);
                     int pos = pSentence.indexOf(token);
@@ -72,10 +72,10 @@ public class NounPrepFilter implements ILinguisticFilter {
         return false;
     }
 
-    private boolean isStopWord(String t){
+    private boolean isStopWord(String t) {
         if (this.stopWords == null) return true;
-        for (String s : this.stopWords){
-            if (s.compareTo(t)==0) return false;
+        for (String s : this.stopWords) {
+            if (s.toLowerCase().compareTo(t.toLowerCase()) == 0) return false;
         }
         return true;
     }
