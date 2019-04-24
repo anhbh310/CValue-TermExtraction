@@ -31,11 +31,12 @@ public class Runner {
             }
         }
 
+        System.out.println(tokens.size());
         tokenList.add(tokens);
         doc.List(tokenList);
         CValueAlgortithm cvalue = new CValueAlgortithm();
         cvalue.init(doc);
-        cvalue.addNewProcessingFilter(new NounVerbFilter("stopWord.txt"));
+        cvalue.addNewProcessingFilter(new NounPrepFilter("stopWord.txt"));
         cvalue.runAlgorithm();
         PrintWriter writer = new PrintWriter("output.txt");
         for (Term term : doc.getTermList()) {
