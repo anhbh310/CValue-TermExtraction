@@ -35,7 +35,8 @@ public class NounPrepFilter implements ILinguisticFilter {
                     tokenList.add(token);
                     int pos = pSentence.indexOf(token);
                     String candidate = token.getWordForm();
-                    findCandidate(pSentence, pos, candidate);
+                    if (pos < pSentence.size() -1)
+                        findCandidate(pSentence, pos, candidate);
                 }
             }
         }
@@ -52,7 +53,7 @@ public class NounPrepFilter implements ILinguisticFilter {
                 list.add(candidate);
             }
             pPos++;
-            if (sentenceSize - 1 == pPos + 1) {
+            if (sentenceSize - 1 <= pPos) {
                 return;
             }
             findCandidate(pSentence, pPos, candidate);

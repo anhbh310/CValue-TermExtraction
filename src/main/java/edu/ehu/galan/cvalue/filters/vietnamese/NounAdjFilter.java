@@ -33,7 +33,8 @@ public class NounAdjFilter implements ILinguisticFilter {
                 if (token.getPosTag().matches("Np|Nc|N|Nu|Nb|Ny") && isStopWord(token.getWordForm())) {
                     int pos = pSentence.indexOf(token);
                     String candidate = token.getWordForm();
-                    findCandidate(pSentence, pos, candidate);
+                    if (pos < pSentence.size() -1)
+                        findCandidate(pSentence, pos, candidate);
                 }
             }
         }
@@ -48,7 +49,7 @@ public class NounAdjFilter implements ILinguisticFilter {
             list.add(candidate);
             pPos++;
 //            if (sentenceSize - 1 == pPos || !(pSentence.get(pPos).getPosTag().matches("Np|Nc|N|Nu|Nb|Ny|A"))) {
-            if (sentenceSize - 1 == pPos) {
+            if (sentenceSize - 1 <= pPos) {
                 return;
             }
             findCandidate(pSentence, pPos, candidate);
